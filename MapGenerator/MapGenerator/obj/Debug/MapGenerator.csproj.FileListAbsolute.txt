@@ -8,3 +8,13 @@ C:\Users\Harry\source\repos\MapGenerator\MapGenerator\obj\Debug\MapGenerator.csp
 C:\Users\Harry\source\repos\MapGenerator\MapGenerator\obj\Debug\MapGenerator.csproj.CoreCompileInputs.cache
 C:\Users\Harry\source\repos\MapGenerator\MapGenerator\obj\Debug\MapGenerator.exe
 C:\Users\Harry\source\repos\MapGenerator\MapGenerator\obj\Debug\MapGenerator.pdb
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\bin\Debug\MapGenerator.exe.config
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\bin\Debug\MapGenerator.exe
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\bin\Debug\MapGenerator.pdb
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.csprojResolveAssemblyReference.cache
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.Form1.resources
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.Properties.Resources.resources
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.csproj.GenerateResource.Cache
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.csproj.CoreCompileInputs.cache
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.exe
+C:\Users\Harry\Documents\Programming\C#\TerrainGeneration\MapGenerator\MapGenerator\obj\Debug\MapGenerator.pdb

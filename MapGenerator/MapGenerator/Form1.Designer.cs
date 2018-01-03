@@ -23,23 +23,25 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.mainContainer = new System.Windows.Forms.FlowLayoutPanel();
+            this.genButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // mainContainer
+            // genButton
             // 
-            this.mainContainer.Location = new System.Drawing.Point(102, 44);
-            this.mainContainer.Margin = new System.Windows.Forms.Padding(0);
-            this.mainContainer.Name = "mainContainer";
-            this.mainContainer.Size = new System.Drawing.Size(900, 500);
-            this.mainContainer.TabIndex = 0;
+            this.genButton.Location = new System.Drawing.Point(506, 592);
+            this.genButton.Name = "genButton";
+            this.genButton.Size = new System.Drawing.Size(75, 23);
+            this.genButton.TabIndex = 1;
+            this.genButton.Text = "Regenerate";
+            this.genButton.UseVisualStyleBackColor = true;
+            this.genButton.Click += new System.EventHandler(this.genButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1104, 589);
-            this.Controls.Add(this.mainContainer);
+            this.ClientSize = new System.Drawing.Size(1084, 662);
+            this.Controls.Add(this.genButton);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
@@ -47,8 +49,7 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.FlowLayoutPanel mainContainer;
+        private System.Windows.Forms.Button genButton;
     }
 }
 

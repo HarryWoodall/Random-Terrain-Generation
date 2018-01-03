@@ -11,90 +11,252 @@ using System.Windows.Forms;
 namespace MapGenerator {
     public partial class Form1 : Form {
 
-        Panel[,] map;
+        byte[,] map;
         int pixelSize = 20;
         int mapX;
         int mapY;
+        int startX;
+        int startY;
+
         Random random = new Random();
+        Graphics g;
+        SolidBrush b;
 
         public Form1() {
             InitializeComponent();
-            mapX = mainContainer.Width / pixelSize;
-            mapY = mainContainer.Height / pixelSize;
-            map = new Panel[mapX, mapY];
-            createMap();
-            Color color = populateMap(populateMap(populateMap(Color.Green)));
-            addNoise();
+            mapX = 900 / pixelSize;
+            mapY = 500 / pixelSize;
+            startX = 92;
+            startY = 44;
+            map = new byte[mapX, mapY];
         }
 
-        private void createMap() {
+        public void redrawMap() {
+            resetMap();
+            addSeed();
+            addTexture01();
+            addTexture02();
+            increaseNoise();
+            addFilling();
+        }
+
+        public void resetMap() {
             for (int i = 0; i < mapY; i++) {
                 for (int j = 0; j < mapX; j++) {
-                    Panel panel = new Panel();
-                    panel.Padding = new Padding(0);
-                    panel.Margin = new Padding(0);
-                    panel.Size = new Size(pixelSize, pixelSize);
-                    panel.BorderStyle = BorderStyle.FixedSingle;
-                    panel.BackColor = Color.White;
-                    mainContainer.Controls.Add(panel);
-                    map[j, i] = panel;
-                    if (random.Next(1, 30) > 28) {
-                        map[j, i].BackColor = Color.Green;
+                    map[j, i] = 0;
+                }
+            }
+        }
+
+        public void addSeed() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+                    if (random.Next(0,30) > 28) {
+                        map[j, i] = 1;
                     }
                 }
             }
         }
 
-        private Color populateMap(Color color) {
+        public void addTexture01() {
             for (int i = 0; i < mapY; i++) {
                 for (int j = 0; j < mapX; j++) {
-                    if (map[j,i].BackColor == color) {
 
-                        if (j !=0) {
-                            map[j - 1, i].BackColor = Color.FromArgb(color.A - 30, color);
+                    if (map[j,i] == 1) {
+
+                        if (j != 0 && i != 0) {
+                            map[j - 1, i - 1] = 2;
                         }
-                        if (j != mapX - 1) {
-                            map[j + 1, i].BackColor = Color.FromArgb(color.A - 30, color);
+
+                        if (j != 0) {
+                            map[j - 1, i] = 2;
+                        }
+
+                        if (j != 0 && i != mapY - 1) {
+                            map[j - 1, i + 1] = 2;
                         }
 
                         if (i != 0) {
-                            map[j, i - 1].BackColor = Color.FromArgb(color.A - 30, color);
+                            map[j, i - 1] = 2;
                         }
+
                         if (i != mapY - 1) {
-                            map[j, i + 1].BackColor = Color.FromArgb(color.A - 30, color);
+                            map[j, i + 1] = 2;
+                        }
+
+                        if (j != mapX - 1 && i != 0) {
+                            map[j + 1, i - 1] = 2;
+                        }
+
+                        if (j != mapX - 1) {
+                            map[j + 1, i] = 2;
+                        }
+
+                        if (j != mapX - 1 && i != mapY - 1) {
+                            map[j + 1, i + 1] = 2;
                         }
                     }
                 }
             }
-            return Color.FromArgb(color.A - 30, color);
         }
 
-        private void addNoise() {
+        public void addTexture02() {
             for (int i = 0; i < mapY; i++) {
                 for (int j = 0; j < mapX; j++) {
-                    int counter = 0;
-                    
-                    if (i != mapY - 1 && map[j, i + 1].BackColor != Color.White) {
-                        counter++;
-                    }
 
-                    if (i != 0 && map[j, i - 1].BackColor != Color.White) {
-                        counter++;
-                    }
+                    if (map[j, i] == 2) {
 
-                    if (j != mapX - 1 &&map[j + 1, i].BackColor != Color.White) {
-                        counter++;
-                    }
+                        if (j != 0) {
+                            if (!(map[j - 1, i] == 2 || map[j - 1, i] == 1)) {
+                                map[j - 1, i] = 3;
+                            }
+                        }
 
-                    if (j != 0 && map[j - 1, i].BackColor != Color.White) {
-                        counter++;
-                    }
+                        if (i != 0) {
+                            if (!(map[j, i - 1] == 2 || map[j, i - 1] == 1)) {
+                                map[j, i - 1] = 3;
+                            }
+                        }
 
-                    if (counter >= 3) {
-                        map[j, i].BackColor = Color.Green;
+                        if (i != mapY - 1) {
+                            if (!(map[j, i + 1] == 2 || map[j, i + 1] == 1)) {
+                                map[j, i + 1] = 3;
+                            }
+                        }
+
+                        if (j != mapX - 1) {
+                            if (!(map[j + 1, i] == 2 || map[j + 1, i] == 1)) {
+                                map[j + 1, i] = 3;
+                            }
+                        }
                     }
                 }
             }
+        }
+
+        public void addFilling() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+
+                    if (map[j, i] == 0) {
+                        byte counter = 0;
+
+                        if (j != 0) {
+                            if (map[j - 1, i] != 0) {
+                                counter++;
+                            }
+                        }
+
+                        if (i != 0) {
+                            if (map[j, i - 1] != 0) {
+                                counter++;
+                            }
+                        }
+
+                        if (i != mapY - 1) {
+                            if (map[j, i + 1] != 0) {
+                                counter++;
+                            }
+                        }
+
+                        if (j != mapX - 1) {
+                            if (map[j + 1, i] != 0) {
+                                counter++;
+                            }
+                        }
+
+                        if (counter >= 3) {
+                            map[j, i] = 4;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void increaseNoise() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+
+                    if (map[j,i] == 3) {
+
+                        if (random.Next(0,5) == 3) {
+
+                            if (j != 0) {
+                                if (map[j - 1, i] == 0) {
+                                    map[j - 1, i] = 5;
+                                }
+                            }
+
+                            if (i != 0) {
+                                if (map[j, i - 1] == 0) {
+                                    map[j, i - 1] = 5;
+                                }
+                            }
+
+                            if (i != mapY - 1) {
+                                if (map[j, i + 1] == 0) {
+                                    map[j, i + 1] = 5;
+                                }
+                            }
+
+                            if (j != mapX - 1) {
+                                if (map[j + 1, i] == 0) {
+                                    map[j + 1, i] = 5;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void drawRectangle(int x, int y, Color color) {
+            b = new SolidBrush(color);
+            g = this.CreateGraphics();
+            g.FillRectangle(b, new Rectangle( x, y, pixelSize, pixelSize));
+            b.Dispose();
+            g.Dispose();
+        }
+
+        private void genButton_Click(object sender, EventArgs e) {
+
+            paintOver();
+            redrawMap();
+
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+                    //drawHeatMap(i, j);
+                    drawLandMap(i, j);
+                }
+            }
+        }
+
+        private void paintOver() {
+            b = new SolidBrush(Color.White);
+            g = this.CreateGraphics();
+            g.FillRectangle(b, new Rectangle(startX, startY, 900, 500));
+            b.Dispose();
+            g.Dispose();
+        }
+
+        private void drawLandMap(int i, int j) {
+            if (map[j, i] == 0)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Blue);
+            else
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
+        }
+
+        private void drawHeatMap(int i, int j) {
+            if (map[j, i] == 1)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
+            if (map[j, i] == 2)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Brown);
+            if (map[j, i] == 3)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Red);
+            if (map[j, i] == 4)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Yellow);
+            if (map[j, i] == 5)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Blue);
         }
     }
 }
