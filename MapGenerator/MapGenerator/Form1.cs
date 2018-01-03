@@ -12,7 +12,7 @@ namespace MapGenerator {
     public partial class Form1 : Form {
 
         byte[,] map;
-        int pixelSize = 20;
+        int pixelSize = 10;
         int mapX;
         int mapY;
         int startX;
@@ -37,7 +37,9 @@ namespace MapGenerator {
             addTexture01();
             addTexture02();
             increaseNoise();
+            increaseNoise02();
             addFilling();
+            colorCorrection();
         }
 
         public void resetMap() {
@@ -179,30 +181,156 @@ namespace MapGenerator {
 
                     if (map[j,i] == 3) {
 
-                        if (random.Next(0,5) == 3) {
+                        if (random.Next(0,6) >= 1) {
 
                             if (j != 0) {
                                 if (map[j - 1, i] == 0) {
-                                    map[j - 1, i] = 5;
+                                    map[j - 1, i] = 4;
+                                    continue;
                                 }
                             }
 
                             if (i != 0) {
                                 if (map[j, i - 1] == 0) {
-                                    map[j, i - 1] = 5;
+                                    map[j, i - 1] = 4;
+                                    continue;
                                 }
                             }
 
                             if (i != mapY - 1) {
                                 if (map[j, i + 1] == 0) {
-                                    map[j, i + 1] = 5;
+                                    map[j, i + 1] = 4;
+                                    continue;
                                 }
                             }
 
                             if (j != mapX - 1) {
                                 if (map[j + 1, i] == 0) {
-                                    map[j + 1, i] = 5;
+                                    map[j + 1, i] = 4;
+                                    continue;
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void increaseNoise02() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+
+                    if (map[j, i] == 4) {
+
+                        if (random.Next(0, 4) >= 1) {
+
+                            if (j != 0) {
+                                if (map[j - 1, i] == 0) {
+                                    map[j - 1, i] = 4;
+                                    continue;
+                                }
+                            }
+
+                            if (i != 0) {
+                                if (map[j, i - 1] == 0) {
+                                    map[j, i - 1] = 4;
+                                    continue;
+                                }
+                            }
+
+                            if (i != mapY - 1) {
+                                if (map[j, i + 1] == 0) {
+                                    map[j, i + 1] = 4;
+                                    continue;
+                                }
+                            }
+
+                            if (j != mapX - 1) {
+                                if (map[j + 1, i] == 0) {
+                                    map[j + 1, i] = 4;
+                                    continue;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void colorCorrection() {
+            ccRound01();
+            ccRound02();
+        }
+
+        public void ccRound01() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+
+                    if (map[j, i] != 0) {
+
+                        if (j != 0) {
+                            if (map[j - 1, i] == 0) {
+                                map[j, i] = 5;
+                                continue;
+                            }
+                        }
+
+                        if (i != 0) {
+                            if (map[j, i - 1] == 0) {
+                                map[j, i] = 5;
+                                continue;
+                            }
+                        }
+
+                        if (i != mapY - 1) {
+                            if (map[j, i + 1] == 0) {
+                                map[j, i] = 5;
+                                continue;
+                            }
+                        }
+
+                        if (j != mapX - 1) {
+                            if (map[j + 1, i] == 0) {
+                                map[j, i] = 5;
+                                continue;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ccRound02() {
+            for (int i = 0; i < mapY; i++) {
+                for (int j = 0; j < mapX; j++) {
+
+                    if (!(map[j, i] == 0 || map[j, i] == 5)) {
+
+                        if (j != 0) {
+                            if (map[j - 1, i] == 5) {
+                                map[j, i] = 6;
+                                continue;
+                            }
+                        }
+
+                        if (i != 0) {
+                            if (map[j, i - 1] == 5) {
+                                map[j, i] = 6;
+                                continue;
+                            }
+                        }
+
+                        if (i != mapY - 1) {
+                            if (map[j, i + 1] == 5) {
+                                map[j, i] = 6;
+                                continue;
+                            }
+                        }
+
+                        if (j != mapX - 1) {
+                            if (map[j + 1, i] == 5) {
+                                map[j, i] = 6;
+                                continue;
                             }
                         }
                     }
@@ -241,22 +369,28 @@ namespace MapGenerator {
 
         private void drawLandMap(int i, int j) {
             if (map[j, i] == 0)
-                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Blue);
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.FromArgb(255, 96, 204, 214));
+            else if (map[j, i] == 5)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.FromArgb(255, 241, 241, 147));
+            else if (map[j, i] == 6)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.LightGreen);
             else
                 drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
         }
 
         private void drawHeatMap(int i, int j) {
             if (map[j, i] == 1)
-                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Gray);
             if (map[j, i] == 2)
                 drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Brown);
             if (map[j, i] == 3)
-                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Red);
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
             if (map[j, i] == 4)
-                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Yellow);
-            if (map[j, i] == 5)
                 drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Blue);
+            if (map[j, i] == 5)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
+            if(map[j, i] == 6)
+                drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
         }
     }
 }
