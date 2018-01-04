@@ -12,15 +12,18 @@ namespace MapGenerator {
     public partial class Form1 : Form {
 
         byte[,] map;
-        int pixelSize = 10;
+        int pixelSize = 5;
         int mapX;
         int mapY;
         int startX;
         int startY;
+        short seedValue;
 
         Random random = new Random();
         Graphics g;
         SolidBrush b;
+
+        float centerValue;
 
         public Form1() {
             InitializeComponent();
@@ -29,6 +32,8 @@ namespace MapGenerator {
             startX = 92;
             startY = 44;
             map = new byte[mapX, mapY];
+            centerValue = 0;
+            seedValue = 100;
         }
 
         public void redrawMap() {
@@ -53,7 +58,12 @@ namespace MapGenerator {
         public void addSeed() {
             for (int i = 0; i < mapY; i++) {
                 for (int j = 0; j < mapX; j++) {
-                    if (random.Next(0,30) > 28) {
+                    float ratio1 = (3 * (1 - centerValue)) + 1;
+                    float ratio2 = centerValue * 50;
+
+                    float landValue = (((float)Math.Min(j, mapX - j) * (float)Math.Min(i, mapY - i)) / 2) / (((float)mapY * (float)mapX) / 2);
+
+                    if (random.Next(0, seedValue) > Convert.ToInt32(seedValue - ((ratio2 * landValue) + ratio1))) {
                         map[j, i] = 1;
                     }
                 }
@@ -391,6 +401,10 @@ namespace MapGenerator {
                 drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
             if(map[j, i] == 6)
                 drawRectangle(startX + (j * pixelSize), startY + (i * pixelSize), Color.Green);
+        }
+
+        private void centreBar_Scroll(object sender, EventArgs e) {
+            centerValue = (float)centreBar.Value / 100;
         }
     }
 }
